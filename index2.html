@@ -1,0 +1,95 @@
+<!DOCTYPE html>    
+<html>    
+<head>    
+<meta charset="UTF-8">    
+<title>showImages</title>    
+<style type="text/css">   
+    .float{    
+        float:left;    
+        width : 200px;    
+        height: 200px;    
+        overflow: hidden;    
+        border: 1px solid #CCCCCC;    
+        border-radius: 10px;    
+        padding: 5px;    
+        margin: 5px;    
+    }    
+    img{    
+        position: relative;    
+    }    
+    .result{    
+        width: 200px;    
+        height: 200px;    
+        text-align: center;    
+        box-sizing: border-box;    
+    }   
+  
+  
+    #file_input{  
+        /*display: none;  */
+    }  
+  
+  
+    .delete{  
+        width: 200px;  
+        height:200px;  
+        position: absolute;  
+        text-align: center;  
+        line-height: 200px;  
+        z-index: 10;  
+        font-size: 30px;  
+        background-color: rgba(255,255,255,0.8);  
+        color: #777;  
+        opacity: 0;  
+        transition-duration: 0.7s;  
+        -webkit-transition-duration: 0.7s;   
+    }  
+  
+  
+    .delete:hover{  
+        cursor: pointer;  
+        opacity: 1;  
+    }        
+</style>      
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>  
+</head>    
+    <body>    
+            <input type="file" id="file_input" multiple/>
+            <button type="button" id="send">提交</button>
+            <ul id="kk">
+            </ul>
+   
+    </body> 
+<script type="text/javascript">    
+    var formData=new FormData();
+    $("#file_input").change(function(){
+        console.log(this.files);
+        for(var i=0;i<this.files.length;i++){
+             formData.append("file[]",this.files[i]);
+             var render=new FileReader();
+             render.readAsDataURL(this.files[i]);
+             render.onload=function(){
+                var content=`<li><img src="${this.result}" width="200" height="200"></li>`;
+                $("#kk").append(content);
+             }
+            
+        }
+
+    })
+    $("#send").click(function(){
+        $.ajax({
+            url:"upload.php",
+            type:"post",
+            dataType:"json",
+            contentType: false,  //不可缺参数
+            processData: false,  //不可缺参数
+            data:formData,
+            success:function(res){
+                console.log(res);
+            }
+
+        })
+    })
+                
+</script>      
+</html>
